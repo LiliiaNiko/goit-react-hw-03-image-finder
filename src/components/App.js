@@ -4,7 +4,7 @@ import Button from './Button/Button';
 import ImagesGallery from './ImageGallery/ImagesGallery';
 import Loader from './Loader/Loader';
 import { AppContainer } from './App.styled';
-//import Modal from './Modal/Modal';
+import { FetchImages } from '../servises/pixabayApi';
 
 export class App extends Component {
   state = {
@@ -26,15 +26,7 @@ export class App extends Component {
     ) {
       this.setState({ status: 'pending' });
 
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.query}&page=${this.state.page}&key=28476607-8e552fca251350b3d35959c9a&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          }
-          return Promise.reject(new Error('Not found'));
-        })
+      FetchImages(this.state.query, this.state.page)
         .then(data => {
           this.setState(prevState => ({
             items: [...prevState.items, ...data.hits],
